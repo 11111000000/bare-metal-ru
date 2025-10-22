@@ -1,0 +1,352 @@
+Original: https://waxbanks.wordpress.com/2025/08/01/bare-metal-the-emacs-essay/
+
+bare metal (the emacs essay)
+01 августа 2025
+
+The following submission to Jeremy Friesen’s ‘elevator pitch’-themed Emacs blog carnival is taken from my rather long manuscript in progress (‘the present work’), tentatively titled Voluptuous Panic! I began work on this chapter in late 2022. Can’t gestate forever.
+
+The book is about magic and other antirational practices/beliefs.
+
+My actual elevator pitch for Emacs is ‘It’s a free open-source text editor where you can modify its code to change its most fundamental features while you work. It’s a lot more complicated than VScode or whatever, at first, but once you’re skilled with it it’s probably the most powerful piece of end-user software there is. And it’s a really great text editor, sort of.’ Think of this as my great-glass-elevator pitch.
+
+This chapter is about 11,000 words long and covers a decent amount of ground. I was moved to submit it because of who’s hosting the carnival — I’ve been reading Jeremy’s ‘OSR’ stuff for long years, and there are several passages in here that speak directly to that other shared interest of ours.
+
+Thank you so very much for reading, and to Jeremy for hosting.
+                                                                      
+
+|Over the last quarter-century, we’ve learned that access to tools and
+|ideas is not enough. Practice and experience refine handwork and
+|wisdom, make it better, secure a more subtle touch. So, we’ve changed
+|our motto from ‘access to tools and ideas’ to ‘access to ideas,
+|tools, and practices.’ (Whole Earth #90, Summer 1997)
+|It became pretty apparent around 1995 — I mention that year because
+|it was “the year of the Internet” — that … we were headed to what I
+|now call technopathocracy, “the rule of sick machines,” which is to
+|say “money.” (Peter Lamborn Wilson)
+|The universe winds down. That’s how it’s made. (John M. Ford,
+|‘Against Entropy’)
+
+
+into the weeds
+
+In my 40s I’ve been intentionally pursuing several decade-long projects, trying to master a handful of tools/texts in which I’ve long had a passing interest or curiosity, and which require committed study — all of them are featured in this book, come to think of it.
+
+I prefer plaintext files and programmers’ text editors for writing,1 and for its first several years this project was written using Sublime Text, which is built for coding but which can make a fine distraction-free prose writing environment. (Some text-editor idioms, like the ‘line’ of text, translate uneasily to prose written in ‘paragraphs’ (i.e. long wrapped lines), and programmers’ text editors are generally avoided by nontechnical writers, who stick to tools like Microsoft Word. It’s a pity, but some people aren’t worth saving.)
+
+As Sublime development slowed to a crawl over the decade I used it, I realized that the program will die off long before I stop using computers — at which point I’ll need to learn another text editor’s irritating quirks. A difficult task at age 43, but a much more daunting prospect at 53 or 63. To hell with that.
+
+So I briefly dallied with vim.
+
+Vim is an extraordinary program, a ‘modal’ text editor whose basic interaction model is very different from what you’re probably used to. In its Normal mode, entered by hitting the Escape key, tapping keys doesn’t type letters but instead performs core commands — hjkl each move you one space up/down or left/right, x deletes while X backspaces, / kicks off a regular-expression search. To actually type, you first type i (or a or (etc.)) to enter Insert mode. In a normal editor text-entry is the Main Thing and text manipulation is an extra feature that takes extra keystrokes; in vim, manipulating text is a first-class action. More importantly, those commands are consistently composable, so d$ deletes to the end of the current line, di) (1) deletes what’s (2) inside (3) parentheses while da) does the same but grabs the parens too. This model might not immediately make sense to someone accustomed to impulsively banging out English papers in MS Word with nary an edit or second thought in sight, but for many programmers and computationally minded writers it’s both ergonomically optimal and conceptually Just Right.2 Skilled vim users are terrifying to watch.
+
+Meh, not for me. In a masochistic (lapsed-Catholic) frame of mind I went back to the tool(set) I’d used semi-happily in college in the 1990s: Emacs, ‘the advanced, extensible, customizable, self-documenting editor.’
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+biographical clarification
+
+For the next 10,000 words we’ll refer to hacker and Free Software Foundation creator Richard Stallman as the creator of Emacs. Stallman was a major figure in the computing-counterculture of the 70s and there’s much to say about his complex influence on the free/open-source software movement of the 90s.
+
+Stallman wasn’t the sole creator of Emacs, but by his role in its development, in a sense he became its creator. Life’s funny that way. In keeping with the culture at MIT’s AI Lab at the time, there were a handful of contributors to the ‘?MACS’ project that first extended and then transcended the ancient TECO editor; at the AI Lab, ‘rms’ was seen as ‘first among equals’ in that cohort of programmers, and was in a position to rename ?MACS to ‘Emacs’ in 1976, with the assent of collaborator Guy Steele or ‘gls’ (who later created the Scheme language with Gerald Sussman). James Gosling, who’d later create the Java language, wrote a version of Emacs in the early 80s, which Stallman rewrote almost entirely and released, under his strict formalized ethical principles, as GNU Emacs in 1985. As Steele wrote in 2007:
+
+|RMS still deserves 99% or 99.9% or 99.99% or 99.999% of the credit
+|for taking a package of TECO macros and turning it into the most
+|powerful editor on the planet, twice (first in TECO and then with
+|ELISP) … I don’t think RMS has any reason to deny the people who
+|helped him out during the first few months their due share of
+|credit. They gave of their time and creativity freely, in the best
+|spirit of contributing to the community.
+
+There are important lessons to learn from a fuller telling of this history: about collective-creative inspiration and what Brian Eno called ‘scenius’; managing the interaction between personal-possessive pride and public principle; building and maintaining intentional intellectual community when there’s fuckloads of money to be made; the complex ways in which autism and executive-function issues shaped early ‘geek’ culture, and how mainstream culture has responded to (monetized/derogated) those cognitive peculiarities. Stallman’s subsequent history, including the recent controversy that got him blacklisted from the free-software movement for a while, is an important case study. But this isn’t the place.
+
+YAFIYGI
+
+Emacs has a reputation for being slow, clunky, ancient, inscrutable, needlessly complex, ergonomically catastrophic, and plain ugly. It’s none of those things, but it’s easy to understand why that reputation persists:
+
+New Emacs users do everything slowly because it’s unfamiliar and spare in appearance, i.e. there’s no scaffolding for newbies
+Its text-based austerity and inscrutable private jargon (‘kill’ instead of ‘cut’? a ‘window’ isn’t a window?) give the impression of an ancient piece of software, though it’s constantly being refined
+The key-command sequences3 — e.g. Ctrl-C, Ctrl-A, F to insert a footnote in this markdown-mode file, for instance, or Ctrl-X, Ctrl-F to open a file — are both unfamiliar and clunky, a little too complicated for their frequency of use, seemingly built for alien keyboards4 (and hands); the ergonomics of even basic Emacs key commands appear deranged and discoverability5 is a nightmare
+Common-language UI elements are bizarrely different in Emacs; all its private idioms seem more complex than, or just perversely arbitrarily different from, their equivalents in the commercial-software consensus language. Split a window (‘frame’) in two (i.e. into two ‘windows’) and close (‘kill’) one, and both will disappear for perfectly logical reasons that make no sense to laymen6
+And to modern eyes, Emacs’s visuals — from the wall of ASCII text in a terminal window to the gross tabs — just look ugly, which gets elevated from a matter of taste to a religious concern by those who think sophistication means dressing the part and talking the game instead of doing the work
+
+All of which is to say that, like Drew Barrymore, Emacs is roughly 50 years old and looks it, and users coming to Emacs from modern commercial software are like city apartment-dwellers forced to unplug their microwaves and discover fire. Microwaves make hard things easier, slow things faster, and bad jobs better, but without other tools they can’t make a good meal; moreover, when the seas rise and the lights go out, microwaves will be useless except as kennels for small pets. Fire remains.
+
+You cannot rule without fire.
+
+All this said, I’m not trying to sell you on Emacs. Like Stallman and the program itself, we have other things in mind.
+
+embodied philosophy
+
+To use Emacs is to interact with a system unlike any other similarly capable piece of software: one built around introspection — self-examination, the editor exposing and editing its own code — and an unequaled degree of extensibility. Consider saving a document, then typing the letter s. In Emacs as in MS Word or most anything else, you hit the keyboard shortcut for ‘save’ (here C-x C-s), the document writes to disk, and then you type s and the letter ‘s’ appears onscreen, easy as lying. In nearly every piece of software yet written, there’s no way to customize this behaviour — the program receives some input like Ctrl-S or Cmd-S as the Save command, and ‘s’ means ‘s.’ You touch the key, the letter appears. That’s the contract.
+
+In Emacs, when you hit C-x C-s you run the save-buffer program, a shortish piece of Lisp code which you can in fact view in the source file files.el:
+
+
+(defun save-buffer (&optional arg)
+ (interactive "p")
+  (let ((modp (buffer-modified-p))
+    (make-backup-files (or (and make-backup-files (not (eq arg 0)))
+                   (memq arg '(16 64)))))
+    (and modp (memq arg '(16 64)) (setq buffer-backed-up nil))
+
+    (if (and modp
+             (buffer-file-name)
+             (not noninteractive)
+             (not save-silently))
+    (message "Saving file %s..." (buffer-file-name)))
+    (basic-save-buffer (called-interactively-p 'any))
+    (and modp (memq arg '(4 64)) (setq buffer-backed-up nil))))
+
+(The function’s extensive self-documentation is removed for reasons of concision; the ‘docstring,’ distinct from comments in source code, is among Emacs’s early major innovations.)
+
+The reason this essay is so goddamn insistent about the value of this ancient text editor is this: you can not only edit the above code — which is true of any software you compile (‘build’) yourself — but you can do so at runtime, while working in Emacs itself, e.g. using Emacs Lisp’s ‘advice’ feature: write an arbitrarily complex piece of Lisp code and you can augment, preempt, wrap around, or even replace the save-buffer code with your own, and change how Emacs itself works as you use it. If you don’t see why that’s a big deal, imagine if your phone’s text-message program let you redefine exactly what data you transmit over the network when you hit Send. Imagine if Chrome let you rewrite its Google-surveillance code in its own console, or rip it right out…
+
+But the affordances go further: when you type s in a sentence like this one, regular old s, Emacs executes the self-insert-command program. Yes, a short computer program written in Emacs Lisp, and yes, you can edit and alter it at runtime. Do you want Emacs to replace that letter with something else as you type depending on the textual context (or time of day), recenter the screen every time you start a new paragraph, limit the number of exclamation points you use in a document while you write, log and graph your keystrokes, or enforce ‘Pomodoro’-style breaks whose length varies according to the task you’re performing? All this is possible because Emacs’s maintainers have insisted on those affordances for nearly 50 years, for philosophical reasons.
+
+This access to the program’s inner workings goes beyond ‘customizability,’ though that’s one of Emacs’s easy selling points. Ordinary software developers decide how their programs will work, determine the verbs and objects and basic flow of interaction (the ‘UX’ or ‘user experience’), then permit you, the user/consumer, to change certain adverbs — what colour should the screen be, for instance. (Can we interest you in this season’s ‘Dark Mode’? Our Design Committee picked some lovely colours…) Richard Stallman and his cohort of codevelopers created and maintained, at enormous time/sanity cost, a system in which the user can execute arbitrarily complex programs utilizing Emacs’s buffer/window display framework, picking her own damn verbs and determining how the program works down to the lowest practical level.7
+
+There’s a good old joke: ‘Emacs is a fine operating system, lacking only a decent text editor.’ Let’s go further, in a slightly different direction. Emacs is a work of embodied philosophy: a way of living free (lacking only a decent text editor).
+
+Its commitments are intentional and foundational: Emacs is a free open-source project maintained by Richard Stallman’s Free Software Foundation, an organization dedicated to the radical proposition that once you download a piece of software, you should be able to do whatever you’re able, to it and with it. In other words: you ought to own and control your data and your software, and in no sense should it control you. Free as in beer, free as in speech. The FSF’s means of enforcing their core principles can seem draconian: in order to contribute code to core Emacs, for instance, you must explicitly (laboriously) disclaim any ‘intellectual property’ rights. Well, doing right takes time.
+
+Emacs articulates a philosophy of freedom which holds that a person isn’t truly free unless she has total privacy and total control over her tools. Thus all of Emacs is open to examination and introspection down to the bare metal, its lowest-level C code. Despite the complexity of the tool and computation environment, nothing is snuck by the user. The program has been built specifically to enable that introspection; that’s what it’s for, not text editing — which it’s good at — but granting (enacting) control over computation, the precise opposite of today’s ‘walled garden’ conventions. (Try getting aftermarket parts for your Tesla.) This design commitment is vital and deeply unusual in our time when both hardware hackers and poseurs wear shirts that say I VIOLATE WARRANTIES as a form of prideful dissent. But it’s perfectly in the spirit of its origins in the 70s movement for liberatory personal computation, the creation and dissemination of tools for increasing human health and capability rather than extracting ad dollars from us. (Silicon Valley has simply abandoned this ethos, which is one reason Emacs’s creator Richard Stallman is derided by poseurs.)
+
+You can play Tetris in an Emacs buffer if you like, because what’s possible is permitted; indeed, for some stupid reason Tetris is built in. (Try entering M-x tetris.)8
+
+We’re talking here about a complex software system — really a Lisp runtime, i.e. a program for running other programs — which provides a powerful text editor as its primary feature but not its sole purpose.
+
+|I see Emacs as being fundamentally two things: a programmable
+|runtime, and a beacon for free software. (Murilo Pereira)
+
+The aim of the program is to afford, to enable, an emancipatory experience of autonomous computation. Minds are what bodies do and tools extend mind-body: control of tools9 is freedom.
+
+Even if you don’t think of computation as a kind of outboard non-neural cognitive activity — but especially if you do — Emacs can be understood as a unique tool for free thought, i.e. imaginative effort limited only by mastery of tools and techniques, empowered and uncoerced. Impenetrable to noninitiates, Emacs’s complex incantations wrap around techniques of cognitive transformation not limited to the real-world task of ‘text editing.’ You’re not really using the program until you’ve begun to think like it does — at which point it becomes difficult to imagine using anything else unless forced or obligated, because other ‘similar’ software is bound by more or less well-intentioned constraints of givenness, and trades some amount of freedom for immediate utility, i.e. trades fulfillment for satisfaction. Emacs is made this way for philosophical reasons, and by sticking to its (i.e. the FSF’s, i.e. Stallman’s) philosophical commitments, Emacs manages to both articulate a belief system and be, all jokes aside, a powerful tool that’s a joy to use and to master. When old heads seriously claim that Emacs is the only program they need during the workday, they mean that it’s a total system (essentially an ‘operating system’) under which other activities can be performed. A way of being.
+
+Programmer/gadfly Steve Yegge once described Emacs as
+
+|a sort of hybrid between Windows Notepad, a monolithic-kernel
+|operating system, and the International Space Station… (Steve Yegge)
+
+…but a different kind of nerd might’ve invoked Castle Gormenghast instead of the ISS — a building that’s a world, inverse memory palace in which the method of loci not only memorializes but produces grotesque weirdness. Accreting haphazardly over decades and barely hanging together like a fading empire (or an orbital lab), seemingly autocatalyzing, able to generate new strange realities within. Endless yet barely self-contained.
+
+(John Crowley’s Edgewood comes to mind for me, the world of Susanna Clarke’s Piranesi, the Navidsons’ haunted house — or LambdaMOO and its object #17, the Living Room.)
+
+And now, if you’ve been with us throughout the present work, you should also be thinking once more of ‘magic,’ specifically magic as imaginative (anti)system. With its emphasis on self-determination, self-refashioning, introspection, and love under will, of course we should look at Emacs as a kind of magical system, a whole alternate realm that takes work to make sense of — and once it makes sense it can make anything. You can use it to edit textfiles, even in human languages,10 but that’s like ‘using magic’ to ‘cast a love spell.’ Love spells are side effects of the imaginative transformation of the magus, damn it, and frankly if what you want out of magical inquiry is to make someone fall in love with you then there are better tools out there, curious attentive conversation for instance. It takes a lot of work to make Emacs ‘just work,’ but that’s as it should be: learning Emacs — like learning Lisp or Latin, tantra or tarantella — doesn’t itself solve problems, it lets you see new ways to solve problems. (You might say it’s more a computer scientist’s dream than a software engineer’s.) Lisp’s total lack of ‘syntactic sugar’ means it doesn’t hide what moves it underneath, like a glass-bottom boat. No one speaks Latin anymore, but nearly everyone in the West speaks some language that learning Latin lets you into. Meditating won’t ‘make you peaceful,’ but it might help you understand how to achieve peace. The power of the tool is that it’s you who becomes more powerful, i.e. more ready/able to take authentic responsibility for creation, i.e. more free.
+
+All spells are cast on the caster.
+
+Magic doesn’t work, we keep saying, but it works. To put that more precisely: once you’ve got your dotfiles (consciousness, magical system, toolchest) configured the way you want it, you can do all the things you first set out to do — but the interesting part is the stuff you find yourself wanting once you’re in it, the stuff no one hors-texte could easily imagine (even if there were an outside-the-text).11 What becomes possible only in immersion, after the (im)proper incantations open the headspace. You let go of old wanting and fear of judgment to find that you’re capable of imagining more than you know. Hence the difference between the ‘personal computer’ industry and the ‘personal computing’ movement, the former about purchasing and using tools, the latter about transforming and expanding the self through tool use, realizing human potential…and being, as a ‘side effect,’ less inclined to buy expensive consumer goods from ordinary predators. Why do you think They killed the movement…?
+
+textworlds
+
+|This is how he sees all the time, every day. Like it’s all just us,
+|in here, together. … And we’re all we’ve got. (Lex Luthor)
+
+In 1995 I took a summer class at Johns Hopkins called ‘Explorations in Text-Based Virtual Reality,’ about the weird implications of then-new online ‘multi-user dungeons/domains’ (MUDs) — basically multiplayer realtime Zork (q.v.). The class’s readings ranged from Scott Bukatman to Mark Dery to Neuromancer, from Rheingold’s Virtual Community to Dibbell’s ‘Rape in Cyberspace.’ Combined with that same summer’s spare-time reading (Millennium Whole Earth Catalog, Principia Discordia, Revelation X, Usenet, the early Web) and the puberty-accelerating sf-skinflick Species starring Canadian model/actress Natasha Henstridge, it was a lifechanging experience.
+
+In the computer lab at JHU I learned the term ‘multi-user shared hallucination’ or ‘MUSH’; the term originally referred to a variant of MUD server software but is invoked in a variety of contexts throughout the present work because — not to put too fine a point on it — it can refer to basically everything I’m interested in, everything good and groovy. While our class’s primary software objects of study were MOOs (MUDs Object-Oriented), in those heady days of the Whole Earth ‘Lectronic Link and Barlow’s ‘Declaration of the Independence of Cyberspace’ it made sense for us to encounter cyberspace itself, as well as the deeply weird cultures self-organizing around it, as one and many kinds of shared hallucination, distributed technomagical experiments carried out at the interface of virtual space (innerspace/headspace as much as network substrate or textual environment) and ‘meatspace.’ Cyberspace was fantasy made real or anyway surreal, an intense effort of imaginative will: it sounds silly now, but in those days it made more sense to speak in those terms, rich with magical possibility, than to accept commercial or governmental proposals to limit or own that border-blurring playground for linked minds. Of course the emancipatory possibilities of early cyberspace were themselves a shared hallucination, cf. also ‘the Sixties’ vs the 1960s…
+
+Any act of collective storytelling or fantastical creation — game of D&D or Nomic, magical ritual, cybersex, ouija connection or tarot divination, fanciful online-forum conversation, political rally, improvisatory music or comedy — can (should) be thought of as a kind of incantation or willful psychotropism: multi-user shared hallucination. The present work applies the term ‘storygames’ to certain occult practices (e.g. James Merrill and David Jackson’s ouija ‘channeling’); here we’d like to highlight the specifically textual connections between such technologies, the way shared worlds made of words — precise and lossy, individual and collective, formal and lyrical and musical — resemble magical practice as they deform perception and cognition around a fantastical reality. Memorial textwork at a distance. We can be remade of unreal matter: I remember bursting into tears after (temporarily) deleting my LambdaMOO character sometime around the millennium, an act achieved by typing commands to leap off an imaginary cliff near the Lambda house; I remember it felt something like something dying, not quite a person but not just an account on a chat server either. I remember reading Viriconium listening to Chip-Meditation in the lobby of the Disney World hotel, then riding “It’s a Small World” and thinking — knowing — we’d slipped into the story to drift through some animate ruin of the Evening Cultures, and Harrison himself (tegeus-Cromis? or the Grand Cairo?) must’ve ridden through the same tunnel imaginally if not bodily; a story never yet told was somehow being retold…
+
+(keyboard-quit) Shit, where was I? (pop-to-mark-command)
+
+There’s a haunted-labyrinth quality even to ordinary daily Emacs use — sounds ridiculous but honestly it does feel that way — which has little to do with the program’s function but explains some of its mysterious appeal. Its cult. Any number of reasons: proximity to the ancient engine, inscrutable inner-logical hand movements to invoke commands, periodic sudden appearance and disappearance of transient buffers, the knowledge that Emacs has slowly enfolded so many other software systems (‘hey but what if we could tweet inside the text editor? what if we could edit images?‘) without growing less hungry, austerity of appearance combined with an improbable richness of affordance — sheer thalassophobia — or maybe it’s just that Emacs looks and feels, there in its terminal window, like a Zorkian ‘maze of twisty passages all alike.’ Partly that’s Emacs speaking the visual language of its time and place, can’t help but recall Zork (1977) and Rogue (1980) and MUD1 (1978). From decades after-away, Emacs and other such textworlds take on an archaeofuturistic quality, like spotting a hieroglyph of R2D2 on the stone walls of the tomb that holds the Ark of the Covenant. Reads like a record of everything imaginable at some other moment, like Graves’s Greek Myths say, variorumodeling an alien mind: Emacs is a virtual reality. More specifically a text-based VR; I’m back in 1995 again if I ever left…
+
+The text language for LambdaMOO or Zork is dead simple — S to GO SOUTH, SAY ABC to say ‘ABC’ to whoever’s listening — but like myth or glyph or I Ching or Lisp it gives hints of some hidden implicit system; this is the ‘worldbuilding’ that happens at the tool-layer rather than that of description or reference, the revealed structure of affordance. Who speaks the parsertongue thinks the parser’s thoughts; the parser teaches you how to speak to it, how/what to want to speak, limits of what can be spoken. Draws an arc of the magic circle, composable angel-runes. And you try for as real an experience as you will at whatever immersion-depth. A key step to mastery is committing yourself to try those limits, to virtual-reality-test until you bump into Truman’s bounding bubble (limit of fiction; fourth wall) and decide, upon hearing Christof’s hollow voice say FOOL, to turn back and become story for a time — remain part of some magic now your own, a working in new awareness. Learn new rules, new language. (The subtitle of Zork III is ‘The Dungeon Master,’ and guess whose job you take over when you win the game?)
+
+|I’m going to show these people what you don’t want them to see. I’m
+|going to show them a world without you… (Thomas Anderson)
+
+I like to think (it has to be!) of a ‘systemic imaginary’ — an imaginative stance of playfully, skillfully parsing and controlling complex system dynamics, e.g. in SimCity or indeed Nomic (q.v.). The goal of such games, I would argue, is to ‘think like the system,’ to suss out the mapping between participant-input and system-response and employ it fluently, inhabiting the outboard cognitive apparatus;12 maybe it’s clearer to describe this goal as ‘feeling like a system,’ connecting with a ‘second mind’ in silico and feeling the flow of information as if it were a pulse, a want. Think ‘zettelkasten’ maybe, and of Molly the razorgirl’s simstim deck in Neuromancer, how the hacker Case (like the devil Smith in The Matrix) gets off on borrowing her body…tears of release as Case leaps from the prison of his own flesh into the abstract (bodyless) mind of Gibson’s matrix or the simstim’s substitute sensorium. I’d like to think (and the sooner the better!) we’re still talking about Emacs here. In simulative play, the borrowed mind-body isn’t human, and the somatic — indeed erotic — pleasure is in assumption/ascension into an alien thinking-system beyond anthrocategory. We can recognize this logic of blissful dialogic submission in the ‘mystical conversation’ of the poet Rumi13 and his teacher Shams Tabrizi, or (if you prefer this sort of thing) in Paul Muad’Dib’s absorption of/into his ancestral lineage, male and female, by consuming the Water of Life. Younger readers, if such exist: remember how Luke tells Rey, ‘A thousand generations live in you now,’ and the next thing that happens is she becomes super-powerful but ends up killing her long-distance boyfriend and ends the movie alone in the desert among ghosts…? Psychedelic seeing — antisystemic sight — gets you weird, which costs. ‘That is the boundary, and the price of immortality.’14
+
+Working at the system’s limit, confident in an unfamiliar language — interzone of proximal development — there’s a heady sense of discovery and uncertainty beyond known capability, a sliver of terror under the skin; brave people don’t lack fear, they face it. The intrinsic multiplicity of text/word makes for a funny fuzziness at the edge of the textworld. Same for lo-fi graphics, tinny sound: the less precisely the medium reproduces the message, the more responsibility the recipient bears for cocreating meaning — imaginatively constituting the message and the intentions behind it, ‘constitute’ used here to mean both ‘ordain and establish’ and ‘hydrate.’ You merge with the message. Mystery is in text’s nature, in the medium/message gap, and textworlds — because they both are and necessarily aren’t all there on the page — always feel/sound/smell a lot like you, Reader(s). You read the mystery into being, in the gaps in your own perception and understanding; in interactive union with the text (lexical second mind, external system) you then experience that mystery as constituting you; every act of reading or otherwise working with text rests on hope of getting the language just right enough, not knowing what’ll be conjured up if overlaid systems of wordwork and meaning (manifest and latent dream) don’t quiiiiiite fit right. Or if they do. That’s the weird potency of virtual world-words: the way they hook into your own imagining, enlist you in conspiracy. Like it or not.
+
+What is a band without symbols? Symbols are grand.
+
+Twenty-six letters, ten digits, handful of squiggles and strikes, tab stop slash — out of this crooked timber make a world? An order? Instruct the machine on what to do, how to want? Cast a spell? Teletype? Tell a story?
+
+M-x yank-pop?
+
+This quality of tossing pennies into the dark to see if the ghosts toss them back — feeling your way through a set of arcane rules for imaginative transformation, pushing buttons on the derelict starship to see if it starts and might could still reach the oldest light in the cosmos; turning the radio dial juuuust so — is peculiar to a recent yesterday’s virtualities. The ruinous new world requires something else, a ‘consumer-friendly’ amenability to Translation/Adaptation for Foreign Markets or equivalent. Tutorial mode or fuck off, tl;dr. No markets for mystery; no time for daydreaming, which belongs to the less productive old world.
+
+I expect it to work out of the box.
+
+I expect zero latency.
+
+I expect to identify with the hero. I’m certain the author does.
+
+Tell me what you’re gonna tell me, then tell me, then tell me what you told me.
+
+Walk me through self-directed classwork.
+
+Yeeeeeah, I’m gonna need that in an hour, thanks.
+
+…all of which is the precise opposite of magic’s fecund imprecision, like porn is the opposite of eroticism and ‘spoiler’ is the opposite of ‘story’ (wonder). Like a system — software, textworld — whose purpose is to decide for you (for your own good) which questions can be asked, which problems can or should be solved, is the opposite of a system whose purpose is to grant you freedom, not knowing what it might lead to if anything. Trusts you at sea. Convolving with the system’s strangeness is the point (‘first, consider the workings of the kill-ring’) same as the chance to weave your little life in and through and around another human’s is why you’d wanna be in love. Union with another, recognition and resonance and regulation and revision.15 Meaningful autonomy is monstrous, as some brother’s brother or other said — even moreso than typing C-x C-f to open a file…
+
+It’s right there, defun save-buffer (&amp;optional arg) is right there, the answer illustrated: Emacs’s ‘killer app’ is introspection and the terrible freedom it affords — make it yours, make it you, fix it, fuck it up, find out, go on go in — and when we say ‘Yes of course it’s that way, of course magic is a toolset for attaining inner sight/insight, i.e. self-knowledge,‘ we hope that each of those terms resonates with each other. Hope in a language of sensemaking and self-fashioning: introspective empowerment.
+
+We’re just talking about ‘free software,’ after all. Free like finding.
+
+explicity
+
+Gonna talk esoteric philosophy here. First I’ll complain about dishwashers.
+
+In olden days you’d buy a goddamn dishwasher and receive a set of schematics along with it — if it malfunctioned, you could try fixing it yourself, and there was a guarantee right there on the paper that what went on inside was knowable, if you did a little work — plus extensible or open to modification if you were ambitious. Not just that there wasn’t a computer in the appliance, but that high school shop class (and Dad) had prepared you to put a screwdriver to the workings. Just as importantly, you could replace parts yourself without violating the sacred Warranty. The machine was expected to wash your dishes, but you were able and expected to know the machine, if only in broad strokes. You’d own a wrench, and you’d know what it was for.
+
+The world was that way in general. It no longer is, partly because software’s everywhere and is inscrutable to normal humans, partly because corporate predators know that they make more money on subscriptions and service than on finished products. (There’s no point opening up your Prius to look at the engine; it’s a computer with a car wrapped around it, and anyway the carmakers physically restrict your access to the internals so they can charge whatever they want for Authorized service.)
+
+In a modern world where most consumers and all ‘young adults’ would rather pay sociopaths for limited access to a streaming music library than own physical media, and nearly all telecommunication takes place within corporate-controlled ‘walled gardens’ — where ‘creative tools’ are used mostly for consumer activity (remixes, fanfic, ‘memes’) rather than riskier attempts at novel expression — interpassive consumption is all that’s expected of consumers, and increasingly all that’s permitted. (‘Interpassivity’: asking the DVR to watch TV for you, so you can work longer hours without worrying about missing ‘your’ favourite shows.)
+
+When normies praise some technology on the grounds that it ‘just works,’ they don’t mean by that phrase what engineers do: what’s praiseworthy for nontechnical people about such tech is that it lets them go on not thinking about things. Successful consumer tech has to please, not empower; often products need only be impressive for the gullible-innumerate to think they ‘just work.’ Savvy people use that phrase otherwise, to praise robustness and solidity and functionality: something ‘just works’ when it can be counted on to fly true in whatever weather, freeing people up not to relax (be serious!) but to work on other things.
+
+This might be a crucial distinction: some people value technology that lets them be more efficient and effective, do more, while others value technology that lets them do less in absolute terms. (Wise people16 value both, know when each matters, and don’t mistake inactivity for leisure.)
+
+Compare the hideous but hideously powerful interaction-language of Emacs to the memorable shortcuts and pitifully limited affordances of a normal text editor. Compare the oiled smoothness of your grandpa’s ancient pocketknife, how it glides open with a slight slick wrist-flick, to the reluctant action of the multitool you bought for your ongoing grandpa-cosplay but don’t use except to open FedEx boxes plus anyway you mostly leave it home because it breaks up the clean line of your designer ‘tactical’ trousers… This is the difference, respectively, between functional tools and theatrical props, between a world that needs some energy-input to run smoothly but has a shot at being beautiful — magical — and one where living is easy up front but impossible in the long run, pays our way and corrodes our souls.
+
+Tools that let you do harder and better work are a blessing; those that make life easier but worse17 are the other thing, even if we’re raised all wrong and learn to prize them.
+
+Choosing tools and forms that make it possible to get correct at the ‘cost’ of getting dirty or keeping busy, or having to face the unimaginable horror of a steep learning curve, means living with (being seen as) being wrong, out of step with ordinary experience — and even with your own sense of how things Should Be, the outsourced superego-voice. The present work keeps cheering for an uncomfortable but tensely generative doubleness common to weird thought and deliberate practice, that sense of being in the world but not quite of it; that’s is the artist’s condition as well, of course. Working one’s way past easy satisfaction toward deep fulfillment means rejecting the mania for ease and convenience at the core of our secular consumerist state religion — and embracing, not without risk, an alternate reality outside consensus.
+
+(Easy for me to say, of course, here in our nice condo in a sane city with an electric vehicle in off-street parking.)
+
+Our discussion of religious believers ‘keeping two sets of books’ is linked to this feeling of belonging-estrangement: one who prays has to live with the fact that there is in fact a powerful being listening and answering his prayers, namely/only her own mind, which is why the insupportable fictions and metaphysical inanities of organized religion always give way at ground level to unorthodox individual spiritual practices — the close personal relationship with the inner-self who doesn’t exist but helps us in our need — and why the authentic life of the believer is universally one of fulfilling dissatisfaction. Deliberate living with/in open questions and lingering paradox rather than (marketable but false) satisfying answers might inoculate us against certain dumb ideological pressures, but it’s scary and lonely and a pain in the balls — good thing churches provide social compensations for the awful shit their belief systems put acolytes through.
+
+access to tools
+
+Emacs represents a bet that didn’t pay off, on a future that will never, ever be allowed to come. It embodies the charming but mistaken belief that creating tools to make people freer will begin a movement toward freedom. If it’d been made by punks instead of hippies — instead of scientists and engineers living in misguided meritocratic hope — maybe the movement it represents would be in a position to demand instead of remind.
+
+Every time I sit at my computer and open up Emacs I enter a vanished past’s vanished future instead of the future, and I’m granted access to unequaled power, and it breaks my fucking heart.
+
+implicity
+
+They sell you a dishwasher or car or computer program, and the cost of you not having to fix it yourself when it breaks is that you’re not allowed to fix it. The ‘protection’ the warranty offers isn’t for you, it’s for the company — the warranty is there to be violated like a drug law, putting you into touch, which frees Them from any obligation to come to your aid. It creates only violations. The warranty describes their liability in such a way that ordinary, sane actions will absolve them of it; that’s why their lawyers are so well paid. Your job is to remain dependent, and your reward is an infantile ‘happiness.’ Your other job is to shut up.
+
+One of the key tenets/symptoms of metastatic capitalism is that if you’re not a business owner, then you don’t get to decide what should exist in the world — ‘creation’ is only manufacturing, which is the exclusive domain of capital and its minders and servants; the owners, the investors, decide what belongs. ‘Makers’ are allowed to 3d-print tchotchkes, laptop stands, little hooks for hanging a towel next to the oven, nondenominational holiday gifts for their children’s Montessori instructors, etc. They are permitted to be donors; they are forbidden from altering or questioning what’s given. To step out of that literally manufactured consensus, ‘off the grid,’ is to live wrong; one of the worst violations of the consensus order is to try to expand what’s possible, knowable, doable, without monetizing it and making any possible innovations or creations legible to capital. A good citizen would ‘build in a backdoor.’ You certainly aren’t entitled to act freely, i.e. authentically, under the anticreative predatory-assimilative order; the order is given, don’t you see? They want meaningful autonomy to remain literally unimaginable, which is one reason all authentically free experiences are marked (more or less subtly) as — well, to take a representative sample, as ‘slow, clunky, ancient, inscrutable, needlessly complex, ergonomically catastrophic, and plain ugly.’ Keep going: dirty, dangerous, weird, delusional, unfashionable, unsophisticated, anarchic, problematic, harmful…
+
+And ugliness is worst — offending the sensibilities of the surveilling Eye.
+
+‘Outside’ experiences induce an uncomfortable tension for sound biological reasons and unsound social-control reasons. The power of contrapositive thinking: If you deserved to run your own life, you’d be rich. If you were capable of thinking for yourself, of course we’d have given you permission to do so; if you could handle responsibility for this machine, everyone would already know because we’d have told them. You are where you belong. Heel.
+
+To think otherwise is to fall prey to delusion, hubris, fantasy, ‘magical thinking.’ It’s monstrous, gross…like Richard Stallman, say.18
+
+While productive processes are carefully managed and predictable — cf. the heavily optimized Hollywood machine that can no longer churn out anything but sequels — it’s precisely the uncertainty and instability of creative practices that makes them imaginatively fertile; explosive growth is explosive, creation is peril. ‘That dangerous element’: the terrible possibility of category-erasure, the world beneath our feet turning out upside-down, big enough to eat us, mirrormutable. We tool-apes are drawn instinctively to experiences beyond category, unplaceable mouthfeel, total fucking weirdness — familiar dayselves ashblown away — but it’s a fearful draw too, to pass through inner/outer twilight into something (into other us) newly nightmade. Tierce de picarde multiverse decorous inverse — oh leave it in Jamesy, only a bit of funforall. Everyone enjoyce a visit to existential danger now and then, though at day’s end when night falls for real (a work night, a school night) you want defense against such dark arts. Somebody take the keys away from me, I’ll not be trusted.
+
+Well…but then some people are willing to make staying in that double-secret inbetween space into their work — some prefer equipoise to poise, to ‘style.’ Willing to put the work into the working, explore toolmaking not just employ tools. In the cognitive sphere, say: serious meditation, memory development, neuropop drugs if you insist; hacking consciousness. ‘The second mind.’ (Pretend I belaboured obvious parallels to Emacs and magical working here.) Eno: ‘tangential ways of attacking problems… in many senses more interesting than the direct head-on approach.’ Sounds like a lot of work but then you and I didn’t make Another Green World. (Unless that’s you reading, Brian? Knock once for yes…)
+
+Instead of a tool to reduce the world to manageability, imagine a metalanguage for describing and conceiving tools, a whole platform — think of Phil Hine deciding which tulpa to merge with tonight, how to pursue and achieve union without knowing what might come out of it. It’ll be big, anyway. You toss pennies into the dark and if the ghosts throw even one in a thousand back you’ve taken your first step into a larger world.
+
+Farm boy said it: ‘Y’know, I did feel something. I could almost see…’ Go ahead induce some goddamn category error: remain untranslatable, unmarketable. Free — free as in speech, free as in radical, as in ‘Free your mind and your ass will follow,’ as in ‘Don’t you see anything you’d like to try?’ A fine creation, lacking only a decent category.
+
+Tools for introspection not telecommunication.
+
+They (who?) say spells and prayers don’t work, but prayers and spells are tech for introspection and psychotropism with social action as side effect and of course they work, they just don’t do miracles — but nothing does, c’mon now. We mustn’t hold magic to a mundane standard, or compare a knife to a forge or the International Space Station to a carefully curated design-forward App for Writers.
+
+Transgressive tension is essential to creative exploration and the magical working, the nervy excitement of digging under consensus category, delving too deep to be known — and modern consumer anticulture cuts these feelings off as a favour to us. Mohels to go. The System19 justifies staying put in the zero-sum material, by making inbetweenness and provisionality and ugly autonomy out to be sins, forms of fallenness. ‘Falling out of step,’ failing (since who could possibly refuse?) to keep up with the Joneses. But in place of ritual submission to others’ fearful bullshit you might speak or self-insert-command your own words with power; we could craft selves instead of tchotchkes, choose citizen-empowerment over consumer satisfaction. We can keep two sets of books so we’ll have something reassuringly normal to show to those worrywarts who keep their pennies somewhere safe, who don’t wanna hear about ghosts or lisps or the ecthtathy of thtrange thynthethith…
+
+duplicity
+
+One of the basic ideas in computer programming is that a ‘function’ or ‘subroutine’ — a bundled set of instructions, part of a larger program, which can be invoked (‘called’) by other code — has a return value which is useful to the code that invokes it. An address book program might have an alphabetizeContacts(contactList) subroutine, which receives a list of names, contactList, as input and then returns (outputs, hands off, delivers) an alphabetized version of it to the code that called the function. The idea is that any part of the program can invoke that function and know exactly what to give it, and exactly what to expect back in return; moreover, the internal workings of the alphabetizeContacts() function can be changed and it won’t mess up the overall flow of the program, so long as the revised function can still expect a contact list as input and spit out an alphabetized list. Among other things, when a function returns, the machine knows that it’s done making changes. The return value is a kind of guarantee, a contract.
+
+In addition to its return value, a subroutine may have side effects, which are just what they sound like. It might display something to the user, increment a counter — any number of additional actions, visible to the user or not. Debugging a complex program often involves tracing and managing side effects, keeping the program flow clean and knowable (legible); skillful program design involves disciplines of encapsulation and abstraction and careful management of program ‘state,’ not just in the vernacular ‘what does the user think is happening?’ sense but in the more technical ‘what is the value of every variable, what’s stored in memory and where, etc.?’ sense. ‘State’ is an account of the program’s innerworld — hopefully knowable, possibly not.
+
+Crucially, functions and programs are often written in such a way that what they ‘really do’ (in the vernacular sense) is strictly a side effect of their formal, definitional purpose. How exactly information gets to various screens might be irrelevant to the program’s interior logic — which is why display code is its own concern — but without it the program is useless to mere humans. In other words, the term ‘side effect’ indicates activity which might not be captured by the ‘identity’ of the process which generates it, but which might still be central to its role in the world.
+
+The main thing isn’t always the main thing.
+
+Speak of the devil: the main() function of a C program, the primary procedure that runs by default and bounds the universe of the program (so to speak), returns an integer value, up or down, theoretically indicating a successful run or the Other Thing. Either a number or nothing. Now, a certain kind of person might see that as a comprehensive description of all physical activity in the universe; once you’re hip to the concept of ‘absolute zero,’ the temperature at which all movement ceases (-273.15° Celsius, modulo some empiricism), there’s something ever so slightly eerie about the final return 0 which ends the run…
+
+(Though in the C-universe, return 0 is good news; other return values are likely symptoms of fuckery, like shambling footsteps echoing through the silence after the Big Crunch…)
+
+The present work uses the term ‘side effect’ in this specific sense, because magic20 is all side effects. One of our core arguments is that for the sake of our individual and collective sanity we need to recognize and take advantage of the distance between our overt, ‘conscious,’ named actions and the side effects — sometimes obscured by fictional provision — which actually make up much of the workings of our lives. This is an alternate version of the present work’s ‘two sets of books’ theme, pointing to intentional activity that remains invisible even to the mind enacting it, because violates that mind’s structure of expectation. (‘All seeing is seeing-as’; we can’t see what we don’t know.)
+
+Think of the way prayer seems to (must) ‘fail’ because no one but us is listening — no return, so to speak; a void — even though humbling confession is itself the point of the activity, its psychological source of value. This value is difficult for nonparticipants to perceive and register, and the fictional provision named ‘God’ can mask that psychological action from the supplicant herself; in fact it better, or she might not make it all the way to confession in the first place. Similarly, plot resolution appears to be the ‘deliverable’ or payoff of a fictional function-machine, but its side effects — the inner cycles of tension and resolution, the reader’s successive and simultaneous postures of wondering, submission, judgment, reasoning, identification — are the real substance of the reader/fiction relationship, not the happily-ever-after return 0 at the bottom of the slide.
+
+Which is why it’s a dumb dick move to ‘spoil’ story-endings for others or yourself, interfering with that continuous and intentionally crafted emotional contour. We read to be smaller than story, to be inside, not to gain and possess plot-information — else we wouldn’t need story at all, only synopsis. We have to resist the urge to rob ourselves, not just of revelation, but of speculation. Humility is empowering.
+
+We need a working psychology of magic and nonsense.
+
+Using a tool like prayer or Emacs or meditation or (reading) a novel, the user (postulant, querent) directly attends to the accessible interface, the outward provision, while the deeper action continues out of sight. You open the book to find out what happens next but reading and wondering and reflection transform you, translate and dilate you; you focus on your breath or the candle flame or the mantra in order to focus attention, while signification itself breaks down; you ask God and then answer for yourself; you trip through ‘interactive fiction’ doing nothing but solving a series of logic puzzles; you step into a general-purpose programming environment and only stick to editing textfiles; all the while a door stands open behind (or beneath) you waiting for you to grasp the nature and the handle of the tool — to notice and name the side effects, apprehend an unstated purpose, step into the maze of twisty passages. ‘Play to find out what happens.’21
+
+Self-knowledge is a survival tool.
+
+The first thing to know is your duplicity — your multiplicity. There are easier reads and friendlier text editors but the weird growth of a human soul is path-dependent. ‘Faith’ is an uncertain path with an incalculable destination. To navigate the world expertly, forego easy satisfactions and proceed with a dreadful dreamlike rigour. Identify the fictions in play and work them directly, why not? Imaginative ends suggest imaginative means.
+
+When the program is executed the output is growth and death, return 0; but something else goes on.
+
+Emacs is ‘free software’ in the sense that it believes in the possibility of your freedom. It wants that nice thing for you; it embodies that spirit. Lacking only a decent editor, though it’s there to help you build your own — lesser men have.
+
+And there’re no gods so you answer your own prayers, you have no choice really, and whatever answers your prayers is a god not the other way around. That was always the secret, the question to the ultimate answer: we are as gods and may as well git gud at it.
+
+M-x isearch-backward
+
+One reason for the magical practitioner’s fetish for oldness as such is: with the past, first you have to grant and accept that it happened. No choice, it’s real and written. History is a procession of unbelievable (damned!) facts you can’t escape, so sit with it — even the improbable and the seemingly impossible, one strange notion after another. And recognize that it doesn’t go away when you turn away; always the trace remains. The past is for living with, first as embodied by your parents of course. Big as mountains so why try moving them. Figuring magic as unrecoverable read-only past primes us, for pragmatic reasons, to take that past on its own terms, unless of course we’re assholes… One enemy is presentism i.e. protagonism, and one side effect of buying into the dim dumb myth of the Golden Age is to hook into our narrative faculties, prep us to take it onboard — I mean, you have to — so as to skillfully approach the present that occupies us. The A-story. You can write all over the past, it sinks right in. It’s lost to us in fact but present still as story; distance makes the impossible plausible as fictional provision.
+
+The past is paradox, labyrinth and lair, ruin revealing, real but unrealistic, a regression-procession of teachable moments.
+
+Emacs would have trouble finding a new audience today; it’s harder now than it was then, to start wrong. But it comes to us out of the past on its own terms, older and weirder than life. What’s done is done. Most leave it — nightmare they’re trying to awaken from — but some take and find. ‘An acquired taste.’
+
+You don’t get it until you use it, see, you can’t see it until you believe it. The magic circle has to close around the act and belief must make the moment out of the time; pastness makes that transformation possible as fiction does, their imaginative contracts that transform stage set into ancient/alternate wherewhenevers. We utilize the past to recast our action as recovery, discovery, and get on with somewhat less impotent self-consciousness about Where and How. (Or you can mythologize Where and How themselves, make technē your focus; the scientific method takes faith too, reasonable faith.) What has been just is, and is a good start.
+
+They say there’s no Emacs — only your Emacs.
+
+|‘Your Glorantha Will Vary’ (HeroQuest Glorantha, pp. 4, 114, 130,
+|144, 221, and 222)
+
+I mean that time has weight. Coming to weird old textworlds at this moment is its own peculiar experience; its feeling of ruination and recovery carries a complex charge specific to the major-minor decadal interval between their that then and our this now; that distance affords us a certain irresponsibility, room to read and run, which can be a back way into real responsibility. Side effects, sideways stories, oblique strategies. Estrangement transforms engagement and maaaaybe pushes you to act in faith (‘the alternative is fear’), to get used to moving through unknown spaces or forms, new strange corners of you.
+
+There’s something to be said for old ways, old worlds, old fashions, old folks; for wiser or worse we’re wired to treat them differently. Give way and hold the door open. There’s an evolutionary rationale for ‘Once upon a time,’ something to do with the tactics of fictive persuasion and the directionality of time’s arrow, the utility of givenness. You don’t get it until you use it: we’re charged by what we seek and find, and the work we put into worldmaking — the digging we do — in turn constitutes our relationships with our many worlds. Hence trauma-bonding and ‘let me tell you about my character’ and that first novel you’ll never finish and the weird staying power of text vs image’s piercing point, pastlight penetrating: meaning is altered by how we make it, the imaginative metadata we attach. Those side effects. Hence too the difference (q.v.) between grounded confidence and airy certainty. The former comes from working with information, feeling it through your fingertips, figuring out and in; the latter is avoidance. Weightlessness. You can only feel certain about a tool before you’ve picked it up, just as Empson said: ‘…the safety valve alone / Knows the worst truth about the engine; only the child / Has not yet been misled.’
+
+(Santa Claus is a developmental tool.)
+
+Confidence comes of testing, peace like love must be made. The mindset of the toolmaker is different from that of the user, different again from that of the consumer; the first two might find relationship within the curve and grain of the object or act, the common term of making and wielding, but those who pseudoconnect only through the mediating Dollar will always be kept from a truth open only to those who grasp the handle and clip the cable. The consumer-identity cuts true knowledge — that’s what it’s for. That’s one thing ‘money’ is for: to depersonalize obligation into debt without relation.
+
+I don’t have to owe you, I ‘owe money.’
+
+Imaginative cocreation of the textworld: there’s no Emacs but yours, no Nomic or Viriconium beyond notion (yours vary) but there’s this, this play to find out. This labyrinth isn’t a hobby but a ‘lifestyle,’ or rather some unstylish life beneath that wrong word, turning slowly from acquisition to integration, as from the earthly arcana to the inner and cosmic. You answer your own prayers, meaning there’s a universe in which God exists and you are It; what’s bought might feel good but what’s right is found, you have to dig for it and any hole you don’t stop digging is a passage. ‘And does its blood taste like mine?’ If you own a Harley you can join the club, but it can’t be a stock Harley — the proof of authenticity is in your action, even the action of differing. Your keybindings will vary because you will. You pick the nouns and verbs: when we speak the master’s words, we think the—
+
+We should be more skeptical of the worlds we make, and more trusting, against rationality, for the sake of worlds (inner and other) yet to be made. We should know better than to prematurely optimize for order when all of all time arrowpoints in and down to the absolute return 0. Words of wisdom, let it be: your world is a fine stream of consciousness, lacking only a decent editor.
+
+|I too, … when suspecting I’ve fucked the dog, keenly seek some
+|solitude. Our hour is wrong … We who will be His wrath’s object ought
+|to stay close, and confide. Our alternative is flight. Does that
+|appeal? … We ain’t that sort, which is maybe more the pity. (David
+|Milch, Deadwood 3×06, ‘A Rich Find’)
+
+                                                                      
+
+Sticking to plaintext with light markup lets you assemble a modular publishing toolchain in the Unix mode — trustworthy small pieces loosely joined. This project used multimarkdown files tracked with git (and GitLab), pandoc to webbify excerpts and generate quick’n’dirty printable draft docs, \LaTeX and the invaluable memoir class for beautiful print layout, and a variety of small shell scripts to normalize and organize the data. The alternative to sane text-based workflows is to lock in to something like MS Word or Scrivener (lol) and try not to think about interop or data export or platform-dependence. As the bitterness of certain passages in this chapter makes clear, I’m a former user of boutique text editors like iA Writer, OmmWriter, and Ulysses. Happily former. ↩
+I think I might just be too old for that shit, but get back to me in five years when I’m younger. And by the way, Emacs reimplements much of vim as an alternate interaction model in its ‘evil-mode,’ more than enough for non-wizards to treat it as a slightly slower ‘vim plus stuff,’ its idiosyncrasies balanced out by its access to the whole Emacs cosmos. That’s how hardcore Emacs is. ↩
+In Emacs-land you’d actually write these C-c C-a f and C-x C-f since they’re case-sensitive, i.e. f≠F. As a sane adult I now find the case-ambiguity of ‘Ctrl-F means “Find”‘ mildly offensive. Mind you, these are only the default key commands; your keybindings will vary, though once you discover their coherent and consistent rationale you might not want them to. ↩
+Emacs and Vim were indeed both designed on and for keyboards from other universes. ↩
+I’m overselling the difficulty. Type M-x and the beginning of a command’s name and your completion framework will display a list of useful suggestions; start a key sequence and the which-key feature will display a cheatsheet for multipart shortcuts and chords. And of course the incremental search function can be modified to wrap around, or a replacement like the superb swiper package simply dropped in place. It’s frustrating to ‘steelman’ these criticisms of Emacs, since the only good ones are ‘I don’t want to spend time on learning enough for it to be worthwhile’ and ‘my boss makes me use VScode.’ ↩
+The confusion rests on an misunderstanding of the term ‘buffer,’ which I can’t be bothered to clear up here but which even beginning Emacs users must read up on. ↩
+There’s C code beneath the Lisp, handling the most basic actions at high speed, but an interested user can change nearly every user-facing aspect of Emacs from within the program. Bold spelunkers can futz with the source code itself, which is developed in the open of course. ↩
+M- here indicates the meta modifier key, which isn’t on keyboards anymore; typically users map it to the Windows or ‘open apple’ (Cmd) key, but I prefer Option, under my middle finger on the homerow. There’s a ‘super’ key as well, which I invoke by speaking bloodcurdling ritual formulae while slapping myself in the face. ↩
+‘We are as gods and might as well get good at it. So far remotely done power and glory — as via government, big business, formal education, church — has succeeded to point where gross defects obscure actual gains. In response to this dilemma and to these gains a realm of intimate, personal power is developing — power of the individual to conduct his own education, find his own inspiration, shape his own environment, and share his adventure with whoever is interested. Tools that aid this process are sought and promoted by the WHOLE EARTH CATALOG.’ (Stewart Brand’s statement of purpose) ↩
+Chapter 25 of the Emacs manual is entitled ‘Commands for Human Languages,’ which from the machine’s perspective are understandably considered second-class. ↩
+Yes, a dumb Derrida allusion in an essay about word processing. And yes, I remember that it’s a pun/ambiguity, and that Derrida’s weirdly deflating post-hoc dismissals of his own writing’s ambiguities shouldn’t be taken at face value, any more than his writing should. He benefited enormously from being seen both as playful philosopher-punster and misunderstood truth-speaker in protracted guerrilla war against the supposed tyranny of dualistic metaphysics. It’s grievance-airing time! I remember the unintentional comedy of hearing Gayatri Spivak give a long talk in NYC about how no prescriptive account of Derridean deconstruction can possibly capture its complexity and subtlety, but here’s a numbered list of deconstructionist-practice tropes just as a gag among friends, hahaha etc., etc., and then Derrida gets up and says ‘No actually that’s pretty much it.’ I read and heard a lot of silly bullshit during my Theory years but that was either the zenith or the nadir, depending on what kind of day you’re having. ↩
+In the exclusionary-esoteric language of Ron Edwards’s ‘GNS’ theory of gameplay, we might say our ‘systemic imaginary’ reflects a simulationist or ‘system-exploratory’ agenda. ↩
+Yes yes, I know it’s not actually his name, and I know the bestselling American ‘Rumi’ is really Coleman Barks’s demyelinated version of him, yes yes. ↩
+In Morrison/Quitely’s psychedelic classic All-Star Superman, Supes defeats a rampaging Lex Luthor by giving him what he’s always wanted — the powers of a god. Luthor sees everything everywhere all at once and he’s paralyzed by revelation-realization: ‘This is how he sees all the time. Every day. Like it’s all just us, in here, together. And we’re all we’ve got.’ Luthor’s powers dissipate, the plot-clock having run out, and out of his petulant Miltonic-Satanic narcissism he screams at the omnipotent alien: ‘I could have saved the world if it wasn’t for you!!’ Clark decks him. ‘You could have saved the world years ago if it mattered to you, Luthor.’ That is the boundary, and the burden of omnipotence. ↩
+Our terms deliberately reflect those of A General Theory of Love, which argues that ‘love’ can be understood as a set of communication protocols for facilitating emotional codevelopment by limbic resonance (sharing), limbic regulation (stabilizing), and limbic revision (learning). That book presents a unified account of ‘love’ which links the intimate physical process of heartbeat regulation in infants to the action-at-a-distance of a sonnet, i.e. I’m eerily precisely the target audience for it and I owe its authors Lewis, Amini, and Lannon a large debt which the present work tries to pay down. ↩
+I thought of my beloved friend Jeremy as I wrote this, a guy who sometimes has a hard time relaxing but who knows both the value and the pleasure of it, and tries to make a world where it’s both safe and possible for other people to let out their breath and live. Jeremy is a good man. ↩
+(think of heroin and ‘online dating’ and streaming video and Uber and AirBnB and Twitter, then (ehhh, why not) think about deregulation and mass surveillance and AI art and grade inflation and ‘harm reduction.’) ↩
+(RMS actually is gross, as those who’ve put him up during conferences and speaking gigs will testify — but not because of his philosophical beliefs) ↩
+Even after all these years, I still get a kick out of referring derisively to ‘the System,’ or making fun of ‘sellouts.’ Gen X represent! ↩
+A core argument of the present work is that the term ‘magic’ fits most human experience, even yours. ↩
+This line comes from the gamemaster advice section of Vincent Baker’s roleplaying game Apocalypse World, much the best example of its type. ‘Play to find out’ sounds obvious, but in the ‘worldbuilding’-obsessed world of RPGs (and particularly the anxious, hapless microworld of ‘storygames’) it’s an unbinding spell. Baker’s ‘Master of Ceremonies Playbook’ also includes these equally wise bits of advice for those running roleplaying adventures everybody: ‘Look through crosshairs… Ask provocative questions and build on the answers.’ And best of all: ‘Respond with fuckery and intermittent rewards.’ ↩
