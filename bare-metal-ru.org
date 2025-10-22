@@ -91,6 +91,7 @@ RMS всё равно заслуживает 99% или 99.9% или 99.99% ил
     (message "Saving file %s..." (buffer-file-name)))
     (basic-save-buffer (called-interactively-p 'any))
     (and modp (memq arg '(4 64)) (setq buffer-backed-up nil))))
+    #+end_src    
 
 (Обширная «самодокументация» функции опущена ради краткости; ~docstring~, отличающийся от комментариев в исходнике, — одна из ранних важных инноваций Emacs.)
     
